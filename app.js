@@ -349,7 +349,7 @@ function setupInstall() {
     refs.installBtn.classList.add('hidden');
     refs.installHint.classList.add('hidden');
   } else {
-    refs.installHint.textContent = 'If Install App does not appear immediately, refresh once after GitHub Pages finishes deploying.';
+    refs.installHint.textContent = 'For first install on GitHub Pages, open once, refresh once, then wait 3 seconds.';
     refs.installHint.classList.remove('hidden');
   }
 
@@ -393,7 +393,10 @@ function setupActions() {
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js', { scope: './' }).then(() => navigator.serviceWorker.ready).catch(() => {});
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).then(async (registration) => {
+        await navigator.serviceWorker.ready;
+        if (registration.waiting) registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }).catch(() => {});
     });
   }
 }
