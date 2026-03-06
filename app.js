@@ -18,6 +18,7 @@ const fmt = (n) => new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).
 
 const refs = {
   installBtn: el('installBtn'),
+  installHint: el('installHint'),
   bankrollValue: el('bankrollValue'),
   roundCount: el('roundCount'),
   activeCount: el('activeCount'),
@@ -337,16 +338,27 @@ function setupTabs() {
       document.querySelectorAll('.tab-screen').forEach((item) => item.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
     });
   });
 }
 
 function setupInstall() {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (isStandalone) {
+    refs.installBtn.classList.add('hidden');
+    refs.installHint.classList.add('hidden');
+  } else {
+    refs.installHint.textContent = 'If Install App does not appear immediately, refresh once after GitHub Pages finishes deploying.';
+    refs.installHint.classList.remove('hidden');
+  }
+
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
     refs.installBtn.classList.remove('hidden');
+    refs.installHint.textContent = 'Install App is ready. Tap the button above.';
+    refs.installHint.classList.remove('hidden');
   });
 
   refs.installBtn.addEventListener('click', async () => {
@@ -355,10 +367,14 @@ function setupInstall() {
     await deferredInstallPrompt.userChoice;
     deferredInstallPrompt = null;
     refs.installBtn.classList.add('hidden');
+    refs.installHint.textContent = 'If Chrome still shows only shortcut, clear site data once and reopen the site.';
+    refs.installHint.classList.remove('hidden');
   });
 
   window.addEventListener('appinstalled', () => {
     refs.installBtn.classList.add('hidden');
+    refs.installHint.textContent = 'App installed successfully.';
+    refs.installHint.classList.remove('hidden');
   });
 }
 
@@ -377,7 +393,7 @@ function setupActions() {
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).then(() => navigator.serviceWorker.ready).catch(() => {});
     });
   }
 }

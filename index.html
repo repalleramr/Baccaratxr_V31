@@ -22,16 +22,9 @@
       <button id="installBtn" class="ghost-btn hidden" type="button">Install App</button>
     </header>
 
-    <nav class="tabbar" aria-label="Main tabs">
-      <button class="tab-btn active" data-tab="play">Play</button>
-      <button class="tab-btn" data-tab="board">Board</button>
-      <button class="tab-btn" data-tab="history">History</button>
-      <button class="tab-btn" data-tab="analytics">Analytics</button>
-      <button class="tab-btn" data-tab="ladder">Ladder</button>
-      <button class="tab-btn" data-tab="settings">Settings</button>
-    </nav>
+    <div id="installHint" class="install-hint hidden" aria-live="polite"></div>
 
-    <main>
+    <main class="main-content">
       <section class="tab-screen active" id="tab-play">
         <div class="grid cards-3 top-stats">
           <article class="card stat big-stat">
@@ -42,7 +35,7 @@
           <article class="card stat">
             <div class="label">Rounds</div>
             <div class="value" id="roundCount">0</div>
-            <div class="muted">Completed shoes entries</div>
+            <div class="muted">Completed shoe entries</div>
           </article>
           <article class="card stat">
             <div class="label">Active Numbers</div>
@@ -161,6 +154,15 @@
         </div>
       </section>
     </main>
+
+    <nav class="tabbar bottom-tabbar" aria-label="Main tabs">
+      <button class="tab-btn active" data-tab="play" type="button"><span class="tab-emoji">▶</span><span>Play</span></button>
+      <button class="tab-btn" data-tab="board" type="button"><span class="tab-emoji">▦</span><span>Board</span></button>
+      <button class="tab-btn" data-tab="history" type="button"><span class="tab-emoji">⟲</span><span>History</span></button>
+      <button class="tab-btn" data-tab="analytics" type="button"><span class="tab-emoji">▤</span><span>Analytics</span></button>
+      <button class="tab-btn" data-tab="ladder" type="button"><span class="tab-emoji">⋮</span><span>Ladder</span></button>
+      <button class="tab-btn" data-tab="settings" type="button"><span class="tab-emoji">⚙</span><span>Settings</span></button>
+    </nav>
   </div>
 
   <script src="./app.js"></script>
